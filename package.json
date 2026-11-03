@@ -1,0 +1,6 @@
+{
+  "name":"shareef-sons-events","private":true,"version":"1.0.0","type":"module",
+  "scripts":{"dev":"vite --host 0.0.0.0","build":"tsc -b && vite build","preview":"vite preview --host 0.0.0.0"},
+  "dependencies":{"@convex-dev/auth":"^0.0.94","convex":"^1.41.0","lucide-react":"^0.577.0","react":"^19.2.0","react-dom":"^19.2.0"},
+  "devDependencies":{"@types/react":"^19.2.0","@types/react-dom":"^19.2.0","@vitejs/plugin-react":"^4.3.4","typescript":"~5.8.3","vite":"^6.2.0"}
+}

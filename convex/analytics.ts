@@ -1,0 +1,6 @@
+import {getAuthUserId} from "@convex-dev/auth/server";
+import {mutation,query} from "./_generated/server";
+import {v} from "convex/values";
+async function admin(ctx:any){const id=await getAuthUserId(ctx);if(!id)return false;const u=await ctx.db.get(id);return !!process.env.ADMIN_EMAIL&&(u?.email||"").toLowerCase()===process.env.ADMIN_EMAIL.toLowerCase();}
+export const track=mutation({args:{visitorId:v.string(),path:v.string(),referrer:v.optional(v.string()),device:v.string()},handler:async(ctx,a)=>{if(a.visitorId.length>=8&&a.visitorId.length<=100)await ctx.db.insert("analyticsEvents",{...a,createdAt:Date.now()});}});
+export const overview=query({args:{},handler:async(ctx)=>{if(!(await admin(ctx)))throw new Error("Administrator access required.");const rows=await ctx.db.query("analyticsEvents").withIndex("by_created_at").order("desc").take(5000);const midnight=new Date();midnight.setHours(0,0,0,0);const visitors=new Set(rows.map(x=>x.visitorId));const today=new Set(rows.filter(x=>x.createdAt>=midnight.getTime()).map(x=>x.visitorId));const pages:Record<string,number>={};rows.forEach(x=>pages[x.path]=(pages[x.path]||0)+1);return {visitors:visitors.size,pageViews:rows.length,today:today.size,pages:Object.entries(pages).sort((a,b)=>b[1]-a[1]).slice(0,8)};}});
