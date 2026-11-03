@@ -15,9 +15,9 @@ export default function App(){
  const [menu,setMenu]=useState(false); const [sent,setSent]=useState(false); const [err,setErr]=useState("");
  const [form,setForm]=useState({customerName:"",phone:"",whatsapp:"",email:"",eventType:"Wedding",eventDate:"",guestCount:"100",venue:"",city:"Faisalabad",services:"Wedding Decoration",budget:"",details:""});
  const submit=useMutation(api.bookings.submit);
- const gallery=useQuery(api.gallery?.listPublic ?? "gallery:listPublic" as any,{});
+ const gallery=useQuery(api.gallery.listPublic,{});
  const {signIn,signOut}=useAuthActions();
- const {isAuthenticated}=useAuthActions() as any;
+ 
  const allowed=useQuery(api.bookings.isAdmin,{});
  const bookings=useQuery(api.bookings.listForAdmin,allowed?{}:"skip");
  const update=useMutation(api.bookings.updateStatus);
